@@ -1,0 +1,33 @@
+{
+  "name": "saga.li",
+  "version": "0.0.1",
+  "description": "Simple Sagas for Preact",
+  "source": "src/index.js",
+  "module": "dist/index.m.js",
+  "main": "dist/index.js",
+  "scripts": {
+    "watch": "microbundle watch",
+    "build": "rollup -c",
+    "test": "yarn build && jest"
+  },
+  "author": "conblem <mail@conblem.me>",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "html-looks-like": "^1.0.3",
+    "jest": "^22.4.3",
+    "preact": "^8.2.7",
+    "preact-render-to-string": "^3.7.0",
+    "rollup": "^0.58.2",
+    "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-node-resolve": "^3.3.0"
+  },
+  "peerDependencies": {
+    "preact": "^8.2.7"
+  }
+}
