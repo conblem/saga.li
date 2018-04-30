@@ -25,7 +25,7 @@ jobs:
           paths: .
   test:
     <<: *defaults
-     steps:
+    steps:
       - attach_workspace:
           at: ~/repo
       - run: yarn test
