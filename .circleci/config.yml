@@ -1,9 +1,13 @@
 version: 2
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:8.11.1-stretch
+
 jobs:
   build:
-    docker:
-      - image: circleci/node:8.11.1-stretch
-    working_directory: ~/repo
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
@@ -15,5 +19,22 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+  test:
+    <<: *defaults
+     steps:
+      - attach_workspace:
+          at: ~/repo
       - run: yarn test
       - run: yarn codecov
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      - run: npm publish
