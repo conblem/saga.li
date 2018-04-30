@@ -5,24 +5,39 @@ import * as constants from "./constants";
 export * from "./effects";
 
 class Store extends Component {
-  actions = {};
-  state = this.props.state;
-  proxy = fn => (...args) => {
-    const generator = fn(this.actions, ...args);
-    const inner = message => {
-      const { value, done } = generator.next(message);
-      if (!value) {
-        return Promise.resolve(message);
-      }
-      return this.result(value).then(result => (done ? result : inner(result)));
+  constructor(props) {
+    super(props);
+    this.actions = {};
+    this.state = props.state;
+    this.transformActionIntoPromise = this.transformActionIntoPromise.bind(
+      this
+    );
+    this.callEffect = this.callEffect.bind(this);
+  }
+  transformActionIntoPromise(fn) {
+    return (...args) => {
+      const generator = fn.apply(undefined, [this.actions].concat(arguments));
+      const inner = message => {
+        const yielded = generator.next(message);
+        const value = yielded.value;
+        const done = yielded.done;
+        if (!value) {
+          return Promise.resolve(message);
+        }
+        return this.callEffect(value).then(
+          result => (done ? result : inner(result))
+        );
+      };
+      return inner();
     };
-    return inner();
-  };
-  result = ({ effect, value }) => {
+  }
+  callEffect(effectAndValue) {
+    const effect = effectAndValue.effect;
+    const value = effectAndValue.value;
     switch (effect) {
       case constants.CALL:
-        const { fn, args } = value;
-        return Promise.resolve(fn(...args));
+        console.log(value);
+        return Promise.resolve(value.fn.apply(undefined, value.args));
       case constants.GET:
         return Promise.resolve(this.state);
       case constants.PUT:
@@ -30,18 +45,22 @@ class Store extends Component {
       default:
         throw new Error("Not implemented");
     }
-  };
-  getChildContext = () => {
-    const { proxy, props, state } = this;
-    this.actions = Object.entries(props.actions).reduce(
-      (acc, [index, value]) => ({
-        [index]: proxy(value),
-        ...acc
-      }),
+  }
+  getChildContext() {
+    this.actions = Object.entries(this.props.actions).reduce(
+      (acc, indexAndValue) =>
+        Object.assign(
+          {
+            [indexAndValue[0]]: this.transformActionIntoPromise(
+              indexAndValue[1]
+            )
+          },
+          acc
+        ),
       {}
     );
-    return { state, actions: this.actions };
-  };
+    return { state: this.state, actions: this.actions };
+  }
   render() {
     return this.props.children[0];
   }
