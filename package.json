@@ -1,15 +1,15 @@
 {
   "name": "saga.li",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Simple Sagas for Preact",
   "source": "src/index.js",
   "module": "dist/index.m.js",
   "main": "dist/index.js",
   "scripts": {
-    "watch": "microbundle watch",
     "build": "rollup -c",
     "test": "yarn build && jest"
   },
+  "repository": "github:conblem/saga.li",
   "author": "conblem <mail@conblem.me>",
   "license": "ISC",
   "jest": {

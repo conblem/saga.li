@@ -4,10 +4,8 @@ import commonjs from "rollup-plugin-commonjs";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import filesize from "rollup-plugin-filesize";
 
-export default {
+const baseconfig = () => ({
   entry: "src/index.js",
-  dest: "dist/index.js",
-  format: "cjs",
   sourceMap: "inline",
   plugins: [
     babel({
@@ -18,4 +16,17 @@ export default {
     peerDepsExternal(),
     filesize()
   ]
-};
+});
+
+export default [
+  {
+    ...baseconfig(),
+    format: "cjs",
+    dest: "dist/index.js"
+  },
+  {
+    ...baseconfig(),
+    format: "es",
+    dest: "dist/index.m.js"
+  }
+];

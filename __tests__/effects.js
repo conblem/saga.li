@@ -5,15 +5,15 @@ const { put, get, call, default: Store } = require("../dist/");
 
 const state = { count: 10 };
 const actions = {
-  increment: function* () {
+  increment: function*() {
     const { count } = yield get();
     yield put({ count: count + 1 });
   },
-  callTest: function* (actions, asyncCountGetter, resolve) {
+  callTest: function*(actions, asyncCountGetter, resolve) {
     const count = yield call(asyncCountGetter);
     resolve(count);
   },
-  actionInAction: function* ({ increment }) {
+  actionInAction: function*({ increment }) {
     yield call(increment);
     yield call(increment);
     yield get();
@@ -21,28 +21,28 @@ const actions = {
 };
 
 describe("effects", () => {
-  beforeEach(() => document.body.innerHTML = "")
+  beforeEach(() => (document.body.innerHTML = ""));
 
   test("put and get", async () => {
-    const promise = new Promise(resolve => this.resolve = resolve)
+    const promise = new Promise(resolve => (this.resolve = resolve));
     const Component = (props, { actions, state }) => {
       if (state.count === 10) {
-        actions.increment().then(this.resolve)
+        actions.increment().then(this.resolve);
       }
-      return state.count
-    }
+      return state.count;
+    };
     render(
       <Store state={state} actions={actions}>
         <Component />
       </Store>,
       document.body
     );
-    await promise
+    await promise;
     expect(document.body.innerHTML).toBe("11");
   });
 
   test("call", async () => {
-    const asyncCountGetter = () => Promise.resolve(20)
+    const asyncCountGetter = () => Promise.resolve(20);
     const promise = new Promise(resolve => (this.resolve = resolve));
     const Component = (props, { actions }) => {
       actions.callTest(asyncCountGetter, this.resolve);

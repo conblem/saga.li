@@ -1,3 +1,3 @@
-export const CALL = 'CALL';
-export const PUT = 'PUT';
-export const GET = 'GET';
+export const CALL = "CALL";
+export const PUT = "PUT";
+export const GET = "GET";
