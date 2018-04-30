@@ -12,6 +12,9 @@
   },
   "author": "conblem <mail@conblem.me>",
   "license": "ISC",
+  "jest": {
+    "collectCoverage": true
+  },
   "devDependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -21,7 +24,6 @@
     "html-looks-like": "^1.0.3",
     "jest": "^22.4.3",
     "preact": "^8.2.7",
-    "preact-render-to-string": "^3.7.0",
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
     "rollup-plugin-commonjs": "^9.1.0",

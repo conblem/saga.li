@@ -8,7 +8,7 @@ class Store extends Component {
   constructor(props) {
     super(props);
     this.actions = {};
-    this.state = props.state;
+    this.state = Object.assign({}, props.state);
     this.transformActionIntoPromise = this.transformActionIntoPromise.bind(
       this
     );
@@ -16,7 +16,7 @@ class Store extends Component {
   }
   transformActionIntoPromise(fn) {
     return (...args) => {
-      const generator = fn.apply(undefined, [this.actions].concat(arguments));
+      const generator = fn(this.actions, ...args);
       const inner = message => {
         const yielded = generator.next(message);
         const value = yielded.value;
@@ -36,8 +36,7 @@ class Store extends Component {
     const value = effectAndValue.value;
     switch (effect) {
       case constants.CALL:
-        console.log(value);
-        return Promise.resolve(value.fn.apply(undefined, value.args));
+        return Promise.resolve(value.fn(...value.args));
       case constants.GET:
         return Promise.resolve(this.state);
       case constants.PUT:
