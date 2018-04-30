@@ -1,8 +1,12 @@
+#https://circleci.com/blog/publishing-npm-packages-using-circleci-2-0/
+
 version: 2
+
 defaults: &defaults
   working_directory: ~/repo
   docker:
     - image: circleci/node:8.11.1-stretch
+
 jobs:
   build:
     <<: *defaults
@@ -36,3 +40,15 @@ jobs:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
       - run: npm publish
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - build
+      - test
+        requires:
+          - build
+      - deploy:
+          requires:
+            - test
