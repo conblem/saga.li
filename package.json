@@ -1,6 +1,6 @@
 {
   "name": "saga.li",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Simple Sagas for Preact",
   "source": "src/index.js",
   "module": "dist/index.m.js",
@@ -16,6 +16,7 @@
     "collectCoverage": true
   },
   "devDependencies": {
+    "preact-context": "^0.0.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
@@ -33,6 +34,7 @@
     "rollup-plugin-peer-deps-external": "^2.1.0"
   },
   "peerDependencies": {
-    "preact": "^8.2.7"
+    "preact": "^8.2.7",
+    "preact-context": "^0.0.3"
   }
 }

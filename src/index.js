@@ -1,10 +1,19 @@
-import { Component } from "preact";
+import { h, Component } from "preact";
+import { createContext } from "preact-context";
 
 import * as constants from "./constants";
 
 export * from "./effects";
 
-class Store extends Component {
+const Context = createContext("saga.li");
+
+export const Connect = component => props => (
+  <Context.Consumer>
+    {({ state, actions }) => component(props, state, actions)}
+  </Context.Consumer>
+);
+
+export class Store extends Component {
   constructor(props) {
     super(props);
     this.actions = {};
@@ -45,7 +54,7 @@ class Store extends Component {
         throw new Error("Not implemented");
     }
   }
-  getChildContext() {
+  render() {
     this.actions = Object.entries(this.props.actions).reduce(
       (acc, indexAndValue) =>
         Object.assign(
@@ -58,11 +67,10 @@ class Store extends Component {
         ),
       {}
     );
-    return { state: this.state, actions: this.actions };
-  }
-  render() {
-    return this.props.children[0];
+    return (
+      <Context.Provider value={{ state: this.state, actions: this.actions }}>
+        {this.props.children}
+      </Context.Provider>
+    );
   }
 }
-
-export default Store;
