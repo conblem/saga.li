@@ -3,10 +3,11 @@ import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import filesize from "rollup-plugin-filesize";
+import alias from "rollup-plugin-alias";
 
 const baseconfig = () => ({
   entry: "src/index.js",
-  sourceMap: "inline",
+  sourceMap: false,
   plugins: [
     babel({
       exclude: "node_modules/**"
@@ -14,7 +15,11 @@ const baseconfig = () => ({
     resolve(),
     commonjs(),
     peerDepsExternal(),
-    filesize()
+    filesize(),
+    alias({
+      react: "preact-compat",
+      "react-dom": "preact-compat"
+    })
   ]
 });
 

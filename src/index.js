@@ -1,13 +1,13 @@
 import { h, Component } from "preact";
-import { createContext } from "preact-context";
+import createContext from "create-react-context";
 
 import * as constants from "./constants";
 
 export * from "./effects";
 
-const Context = createContext("saga.li");
+const Context = createContext();
 
-export const Connect = component => props => (
+export const connect = component => props => (
   <Context.Consumer>
     {({ state, actions }) => component(props, state, actions)}
   </Context.Consumer>
