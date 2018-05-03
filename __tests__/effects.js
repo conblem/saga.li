@@ -25,7 +25,7 @@ describe("effects", () => {
   test("put and get", async () => {
     let resolveCount;
     const promise = new Promise(resolve => (resolveCount = resolve));
-    const Component = connect((props, { count }, { increment }) => {
+    const Component = connect(Object, Object)(({ count, increment }) => {
       if (count === 10) {
         increment().then(resolveCount);
       }
@@ -45,7 +45,7 @@ describe("effects", () => {
     const asyncCountGetter = () => Promise.resolve(20);
     let resolveCount;
     const promise = new Promise(resolve => (resolveCount = resolve));
-    const Component = connect((props, state, { callTest }) => {
+    const Component = connect(Object, Object)(({ callTest }) => {
       callTest(asyncCountGetter, resolveCount);
     });
     render(
@@ -61,7 +61,7 @@ describe("effects", () => {
   test("action in action", async () => {
     let resolveCount;
     const promise = new Promise(resolve => (resolveCount = resolve));
-    const Component = connect((props, { count }, { actionInAction }) => {
+    const Component = connect(Object, Object)(({ count, actionInAction }) => {
       if (count === 10) {
         actionInAction(resolveCount);
       }

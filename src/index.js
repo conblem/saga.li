@@ -7,9 +7,19 @@ export * from "./effects";
 
 const Context = createContext();
 
-export const connect = component => props => (
+export const connect = (
+  mapStateToProps,
+  mapActionsToProps
+) => Component => props => (
   <Context.Consumer>
-    {({ state, actions }) => component(props, state, actions)}
+    {value => {
+      const newProps = Object.assign({}, props);
+      mapStateToProps &&
+        Object.assign(newProps, mapStateToProps(value.state, props));
+      mapActionsToProps &&
+        Object.assign(newProps, mapActionsToProps(value.actions, props));
+      return <Component {...newProps} />;
+    }}
   </Context.Consumer>
 );
 
