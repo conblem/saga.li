@@ -1,7 +1,7 @@
 const { h } = require("preact");
 const { render } = require("preact");
 
-const { put, get, call, default: Store } = require("../dist/");
+const { put, get, call, Store, connect } = require("../dist/");
 
 const state = { count: 10 };
 const actions = {
@@ -13,24 +13,24 @@ const actions = {
     const count = yield call(asyncCountGetter);
     resolve(count);
   },
-  actionInAction: function*({ increment }) {
+  actionInAction: function*({ increment }, resolve) {
     yield call(increment);
     yield call(increment);
-    yield get();
+    const { count } = yield get();
+    resolve(count);
   }
 };
 
 describe("effects", () => {
-  beforeEach(() => (document.body.innerHTML = ""));
-
   test("put and get", async () => {
-    const promise = new Promise(resolve => (this.resolve = resolve));
-    const Component = (props, { actions, state }) => {
-      if (state.count === 10) {
-        actions.increment().then(this.resolve);
+    let resolveCount;
+    const promise = new Promise(resolve => (resolveCount = resolve));
+    const Component = connect((props, { count }, { increment }) => {
+      if (count === 10) {
+        increment().then(resolveCount);
       }
-      return state.count;
-    };
+      return count;
+    });
     render(
       <Store state={state} actions={actions}>
         <Component />
@@ -43,10 +43,11 @@ describe("effects", () => {
 
   test("call", async () => {
     const asyncCountGetter = () => Promise.resolve(20);
-    const promise = new Promise(resolve => (this.resolve = resolve));
-    const Component = (props, { actions }) => {
-      actions.callTest(asyncCountGetter, this.resolve);
-    };
+    let resolveCount;
+    const promise = new Promise(resolve => (resolveCount = resolve));
+    const Component = connect((props, state, { callTest }) => {
+      callTest(asyncCountGetter, resolveCount);
+    });
     render(
       <Store state={state} actions={actions}>
         <Component />
@@ -58,12 +59,13 @@ describe("effects", () => {
   });
 
   test("action in action", async () => {
-    const promise = new Promise(resolve => (this.resolve = resolve));
-    const Component = (props, { actions, state }) => {
-      if (state.count === 10) {
-        actions.actionInAction().then(({ count }) => this.resolve(count));
+    let resolveCount;
+    const promise = new Promise(resolve => (resolveCount = resolve));
+    const Component = connect((props, { count }, { actionInAction }) => {
+      if (count === 10) {
+        actionInAction(resolveCount);
       }
-    };
+    });
     render(
       <Store state={state} actions={actions}>
         <Component />
