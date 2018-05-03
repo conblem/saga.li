@@ -1,5 +1,5 @@
 import { h, Component } from "preact";
-import createContext from "create-react-context";
+import { createContext } from "context.li";
 
 import * as constants from "./constants";
 

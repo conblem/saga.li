@@ -22,13 +22,12 @@ const actions = {
 };
 
 describe("effects", () => {
-  beforeEach(() => (document.body.innerHTML = ""));
-
   test("put and get", async () => {
-    const promise = new Promise(resolve => (this.resolve = resolve));
+    let resolveCount;
+    const promise = new Promise(resolve => (resolveCount = resolve));
     const Component = connect((props, { count }, { increment }) => {
       if (count === 10) {
-        increment().then(this.resolve);
+        increment().then(resolveCount);
       }
       return count;
     });
@@ -44,9 +43,10 @@ describe("effects", () => {
 
   test("call", async () => {
     const asyncCountGetter = () => Promise.resolve(20);
-    const promise = new Promise(resolve => (this.resolve = resolve));
+    let resolveCount;
+    const promise = new Promise(resolve => (resolveCount = resolve));
     const Component = connect((props, state, { callTest }) => {
-      callTest(asyncCountGetter, this.resolve);
+      callTest(asyncCountGetter, resolveCount);
     });
     render(
       <Store state={state} actions={actions}>
@@ -59,10 +59,11 @@ describe("effects", () => {
   });
 
   test("action in action", async () => {
-    const promise = new Promise(resolve => (this.resolve = resolve));
+    let resolveCount;
+    const promise = new Promise(resolve => (resolveCount = resolve));
     const Component = connect((props, { count }, { actionInAction }) => {
       if (count === 10) {
-        actionInAction(this.resolve);
+        actionInAction(resolveCount);
       }
     });
     render(
