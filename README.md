@@ -38,7 +38,7 @@ const App = () => (
 render(<App />, document.body);
 -->
 
-![Example](https://pic.twitter.com/CX076e208R)
+![Example](https://pbs.twimg.com/media/Dc6sNzTV4AAkDXM.png)
 
 ## License
 
