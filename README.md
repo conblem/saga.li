@@ -7,6 +7,7 @@
 import { render } from "preact";
 import { Store, connect, put, get } from "saga.li";
 
+
 const mapStateToProps = ({ count }) => ({ count });
 const mapActionsToProps = ({ increment }) => ({ increment });
 
@@ -18,6 +19,7 @@ const Counter = connect(mapStateToProps, mapActionsToProps)(
     </div>
   )
 );
+
 
 const state = {
   count: 0
@@ -35,10 +37,11 @@ const App = () => (
   </Store>
 );
 
+
 render(<App />, document.body);
 -->
 
-![Example](https://pbs.twimg.com/media/Dc6sNzTV4AAkDXM.png)
+![Example](https://pbs.twimg.com/media/Dc6sz4UU0AAQqno.png)
 
 ## License
 
