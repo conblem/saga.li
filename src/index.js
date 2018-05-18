@@ -5,7 +5,9 @@ import * as constants from "./constants";
 
 export * from "./effects";
 
-const Context = createContext();
+export const Context = createContext();
+Context.actions = {};
+Context.state = {};
 
 export const connect = (
   mapStateToProps,
@@ -26,8 +28,7 @@ export const connect = (
 export class Store extends Component {
   constructor(props) {
     super(props);
-    this.actions = {};
-    this.state = Object.assign({}, props.state);
+    Context.state = Object.assign({}, props.state);
     this.transformActionIntoPromise = this.transformActionIntoPromise.bind(
       this
     );
@@ -35,7 +36,7 @@ export class Store extends Component {
   }
   transformActionIntoPromise(fn) {
     return (...args) => {
-      const generator = fn(this.actions, ...args);
+      const generator = fn(Context.actions, ...args);
       const inner = message => {
         const yielded = generator.next(message);
         const value = yielded.value;
@@ -57,15 +58,18 @@ export class Store extends Component {
       case constants.CALL:
         return Promise.resolve(value.fn(...value.args));
       case constants.GET:
-        return Promise.resolve(this.state);
+        return Promise.resolve(Context.state);
       case constants.PUT:
-        return new Promise(resolve => this.setState(value, () => resolve()));
+        Context.state = value;
+        return new Promise(resolve =>
+          this.setState(undefined, () => resolve())
+        );
       default:
         throw new Error("Not implemented");
     }
   }
   render() {
-    this.actions = Object.entries(this.props.actions).reduce(
+    Context.actions = Object.entries(this.props.actions).reduce(
       (acc, indexAndValue) =>
         Object.assign(
           {
@@ -78,7 +82,9 @@ export class Store extends Component {
       {}
     );
     return (
-      <Context.Provider value={{ state: this.state, actions: this.actions }}>
+      <Context.Provider
+        value={{ state: Context.state, actions: Context.actions }}
+      >
         {this.props.children}
       </Context.Provider>
     );
