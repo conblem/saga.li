@@ -1,9 +1,10 @@
 const { h } = require("preact");
 const { render } = require("preact");
 
-const { Store, connect } = require("../dist");
+const { default: createStore } = require("../dist");
 
 const state = { count: 10 };
+const { connect, Store } = createStore(state, {});
 
 test("render state to html", () => {
   const Component = connect(Object)(({ count }) => count);

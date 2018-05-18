@@ -33,6 +33,6 @@
     "preact": "^8.2.7"
   },
   "dependencies": {
-    "context.li": "^0.1.1"
+    "context.li": "^0.2.1"
   }
 }
