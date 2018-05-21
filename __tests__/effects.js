@@ -1,7 +1,7 @@
 const { h } = require("preact");
 const { render } = require("preact");
 
-const { put, get, call, Store, connect } = require("../dist/");
+const { put, get, call, default: createStore } = require("../dist/");
 
 const state = { count: 10 };
 const actions = {
@@ -23,6 +23,8 @@ const actions = {
 
 describe("effects", () => {
   test("put and get", async () => {
+    const { StoreProvider, connect } = createStore(state, actions);
+
     let resolveCount;
     const promise = new Promise(resolve => (resolveCount = resolve));
     const Component = connect(Object, Object)(({ count, increment }) => {
@@ -32,9 +34,9 @@ describe("effects", () => {
       return count;
     });
     render(
-      <Store state={state} actions={actions}>
+      <StoreProvider>
         <Component />
-      </Store>,
+      </StoreProvider>,
       document.body
     );
     await promise;
@@ -42,6 +44,8 @@ describe("effects", () => {
   });
 
   test("call", async () => {
+    const { StoreProvider, connect } = createStore(state, actions);
+
     const asyncCountGetter = () => Promise.resolve(20);
     let resolveCount;
     const promise = new Promise(resolve => (resolveCount = resolve));
@@ -49,9 +53,9 @@ describe("effects", () => {
       callTest(asyncCountGetter, resolveCount);
     });
     render(
-      <Store state={state} actions={actions}>
+      <StoreProvider>
         <Component />
-      </Store>,
+      </StoreProvider>,
       document.body
     );
     const count = await promise;
@@ -59,6 +63,8 @@ describe("effects", () => {
   });
 
   test("action in action", async () => {
+    const { StoreProvider, connect } = createStore(state, actions);
+
     let resolveCount;
     const promise = new Promise(resolve => (resolveCount = resolve));
     const Component = connect(Object, Object)(({ count, actionInAction }) => {
@@ -67,9 +73,9 @@ describe("effects", () => {
       }
     });
     render(
-      <Store state={state} actions={actions}>
+      <StoreProvider>
         <Component />
-      </Store>,
+      </StoreProvider>,
       document.body
     );
     const count = await promise;
