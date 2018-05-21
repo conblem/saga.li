@@ -1,6 +1,6 @@
 {
   "name": "saga.li",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Simple Sagas for Preact",
   "source": "src/index.js",
   "module": "dist/index.m.js",
@@ -33,6 +33,6 @@
     "preact": "^8.2.7"
   },
   "dependencies": {
-    "context.li": "^0.2.1"
+    "context.li": "^0.2.2"
   }
 }

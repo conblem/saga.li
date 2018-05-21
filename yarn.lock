@@ -1021,9 +1021,9 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
 
-context.li@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/context.li/-/context.li-0.2.1.tgz#53beb602a1b56a8cb6dac3d1b190f2e1ad7c5f31"
+context.li@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/context.li/-/context.li-0.2.2.tgz#e426d30e3ce660f724f50531b1f76cef25c5904d"
 
 convert-source-map@^1.4.0, convert-source-map@^1.5.1:
   version "1.5.1"

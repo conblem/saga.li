@@ -1,5 +1,5 @@
 const { h, render } = require("preact");
-const { Store, connect, get, put } = require("../dist");
+const { default: createStore, get, put } = require("../dist");
 
 const state = { count: 0 };
 const actions = {
@@ -13,6 +13,8 @@ describe("connect", () => {
   beforeEach(() => (document.body.innerHTML = ""));
 
   it("should mapStateToProps", () => {
+    const { StoreProvider, connect } = createStore(state, actions);
+
     const mapStateToProps = ({ count }) => ({
       countPlusOne: count + 1
     });
@@ -21,14 +23,16 @@ describe("connect", () => {
     });
 
     render(
-      <Store state={state} actions={actions}>
+      <StoreProvider>
         <App />
-      </Store>,
+      </StoreProvider>,
       document.body
     );
   });
 
   it("should mapActionsToProps", async () => {
+    const { StoreProvider, connect } = createStore(state, actions);
+
     let resolveCount;
     const promise = new Promise(resolve => (resolveCount = resolve));
 
@@ -49,9 +53,9 @@ describe("connect", () => {
     );
 
     render(
-      <Store state={state} actions={actions}>
+      <StoreProvider>
         <App />
-      </Store>,
+      </StoreProvider>,
       document.body
     );
     await promise;
@@ -59,15 +63,17 @@ describe("connect", () => {
   });
 
   it("mapStateToProps should receive ownProps", () => {
+    const { StoreProvider, connect } = createStore(state, actions);
+
     const mapStateToProps = (state, { testProp }) => {
       expect(testProp).toBe("I got passed damn");
     };
     const App = connect(mapStateToProps)(({ testProp }) => testProp);
 
     render(
-      <Store state={state} actions={actions}>
+      <StoreProvider>
         <App testProp="I got passed damn" />
-      </Store>,
+      </StoreProvider>,
       document.body
     );
 
@@ -75,15 +81,17 @@ describe("connect", () => {
   });
 
   it("mapActionsToProps should receive ownProps", () => {
+    const { StoreProvider, connect } = createStore(state, actions);
+
     const mapActionsToProps = (props, { testProp }) => {
       expect(testProp).toBe("I got passed damn");
     };
     const App = connect(Object, mapActionsToProps)(({ testProp }) => testProp);
 
     render(
-      <Store state={state} actions={actions}>
+      <StoreProvider>
         <App testProp="I got passed damn" />
-      </Store>,
+      </StoreProvider>,
       document.body
     );
 
