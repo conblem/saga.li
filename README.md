@@ -5,7 +5,19 @@
 
 <!---
 import { render } from "preact";
-import { Store, connect, put, get } from "saga.li";
+import createStore, { put, get } from "saga.li";
+
+const state = {
+  count: 0
+};
+const actions = {
+  increment: function*() {
+    const { count } = yield get();
+    yield put({ count: count + 1 });
+  }
+};
+
+const { StoreProvider, connect } = createStore(state, actions);
 
 
 const mapStateToProps = ({ count }) => ({ count });
@@ -21,27 +33,16 @@ const Counter = connect(mapStateToProps, mapActionsToProps)(
 );
 
 
-const state = {
-  count: 0
-};
-const actions = {
-  increment: function*() {
-    const { count } = yield get();
-    yield put({ count: count + 1 });
-  }
-};
-
 const App = () => (
-  <Store state={state} actions={actions}>
+  <StoreProvider>
     <Counter />
-  </Store>
+  </StoreProvider>
 );
-
 
 render(<App />, document.body);
 -->
 
-![Example](https://pbs.twimg.com/media/Dc6sz4UU0AAQqno.png)
+![Example](https://pbs.twimg.com/media/Dd0yMIgVAAANvaM.png:large)
 
 ## License
 
