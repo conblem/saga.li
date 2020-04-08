@@ -43,6 +43,8 @@ render(<App />, document.body);
 
 ![Example](https://pbs.twimg.com/media/Dc6sz4UU0AAQqno.png)
 
+WIP: Error handling?
+
 ## License
 
 This project is licensed under the ISC License - see the [LICENSE.md](LICENSE.md) file for details
